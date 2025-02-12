@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>小区物业管理系统的实现与设计</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* 全局样式 */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url(bg.png);
+      background-size: cover;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: #ccc;
+    }
+
+    /* 整体包裹容器样式 */
+    #wrap {
+      width: 450px;
+      /*background: rgba(0, 0, 0, 0.9);*/
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      margin-top: 50px;
+      margin-right: 50px;
+    }
+
+    /* 头部样式 */
+    #header {
+      /*background: #000;*/
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* 标题样式 */
+    #title a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    /* 右上角日期样式 */
+    #rightheader p {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      margin: 0;
+      color: #fff;
+    }
+
+    /* 内容区域样式 */
+    #content {
+      padding: 30px;
+    }
+
+    /* 表单样式 */
+    form {
+      margin-top: 20px;
+    }
+
+    /* 表格样式（用于表单布局） */
+    table.form_table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    /* 表格单元格样式 */
+    table.form_table td {
+      padding: 10px 0;
+    }
+
+    /* 输入框样式 */
+    input.inputgri {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #ccc;
+      background: rgba(0, 0, 0, 0.3);
+      transition: border-color 0.3s ease;
+    }
+
+    input.inputgri:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    /* 按钮样式 */
+    .button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s ease;
+    }
+
+    .button:hover {
+      background: #0056b3;
+    }
+
+    /* 按钮组样式（提交和注册按钮） */
+    .button-group {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+    }
+
+    /* 注册按钮样式 */
+    .button-group input[type="button"] {
+      background: #5cb85c;
+    }
+
+    .button-group input[type="button"]:hover {
+      background: #4cae4c;
+    }
+
+    /* 底部样式 */
+    #footer {
+      background: #000;
+      color: #ccc;
+      text-align: center;
+      padding: 15px;
+      border-top: 1px solid #333;
+    }
+
+    /* 底部邮件样式 */
+    #footer_bg {
+      font-size: 14px;
+    }
+
+    /* 图标样式（可用于添加一些装饰性图标，这里以用户名和密码输入框前添加为例） */
+    .input-icon {
+      margin-right: 10px;
+      color: #ccc;
+    }
+  </style>
+</head>
+
+<body>
+<div id="wrap">
+  <div id="header">
+    <div id="rightheader">
+      <p>2024/12/31</p>
+    </div>
+    <div id="topheader">
+      <h1 id="title">
+        <a href="#">小区物业管理系统</a>
+      </h1>
+    </div>
+  </div>
+  <div id="content">
+    <h2>登录</h2>
+    <form id="loginForm" action="/login" method="post">
+      <table cellpadding="0" cellspacing="0" border="0" class="form_table">
+        <tr>
+          <td valign="middle" align="right">
+            <i class="fas fa-user input-icon"></i>
+          </td>
+          <td valign="middle" align="left">
+            <input type="text" class="inputgri" name="name" placeholder="请输入用户名" />
+          </td>
+        </tr>
+        <tr>
+          <td valign="middle" align="right">
+            <i class="fas fa-lock input-icon"></i>
+          </td>
+          <td valign="middle" align="left">
+            <input type="password" class="inputgri" name="pwd" placeholder="请输入密码" />
+          </td>
+        </tr>
+      </table>
+      <div class="button-group">
+        <input type="submit" class="button" value="登录" />
+        <input type="button" class="button" value="注册" onclick="location='register.html'" />
+      </div>
+    </form>
+  </div>
+  <div id="footer">
+    <div id="footer_bg">
+      ABC@126.com
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $('#loginForm').on('submit', function (e) {
+      e.preventDefault(); // 阻止表单的默认提交行为
+      var username = $('input[name=name]').val();
+      var password = $('input[name=pwd]').val();
+      var user = { username: username, password: password };
+      $.ajax({
+        url: '/login', // 后端登录接口路径，对应@RequestMapping("/login")
+        type: 'post',
+        contentType: 'application/json',
+        data: JSON.stringify(user),
+        success: function (data) {
+          if (data === "success") {
+            window.location.href = "main.html"; // 登录成功跳转的页面，可根据实际修改
+          } else {
+            alert("用户名或密码错误"); // 登录失败弹窗提示
+          }
+        },
+        error: function (err) {
+          console.error('Error:', err);
+          alert("网络请求出现错误，请稍后再试"); // 网络请求出错提示
+        }
+      });
+    });
+  });
+</script>
+</body>
+
+</html>

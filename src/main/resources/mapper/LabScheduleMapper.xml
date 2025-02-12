@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.idea_lab.mapper.LabScheduleMapper">
+
+    <select id="selectWeeklyScheduleByLabIdAndWeek" resultType="com.example.idea_lab.pojo.LabSchedule">
+        SELECT *
+        FROM lab_schedule
+        WHERE lab_id = #{labId} AND semester_week = #{week}
+        ORDER BY weekday ASC, timeslot ASC
+    </select>
+
+    <select id="findScheduleByLabAndTime" parameterType="map" resultType="com.example.idea_lab.pojo.LabSchedule">
+        SELECT * FROM lab_schedule
+        WHERE lab_id = #{labId} AND semester_week = #{semesterWeek} AND weekday = #{weekday} AND timeslot = #{timeslot}
+    </select>
+
+
+</mapper>
